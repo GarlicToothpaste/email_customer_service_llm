@@ -18,13 +18,6 @@ def read_email (state : EmailAgentState):
         "messages": HumanMessage(content=f"Processing email: {state['email_content']}")
     }
 
-
-# class EmailClassification(TypedDict):
-#     intent: Literal["question", "bug", "billing", "feature", "complex"]
-#     urgency: Literal["low", "medium", "high", "critical"]
-#     topic : str 
-#     summary : str 
-
 def classify_intent(state : EmailAgentState) -> Command[Literal["search_documentation", "human_review", "draft_response", "bug_tracking"]]:
     """Use LLM to classify email intent and urgency, then route accordingly"""
 
