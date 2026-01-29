@@ -1,3 +1,5 @@
+from rag_functions import initialize_llm, initialize_vectorstore, query_rag
+
 def send_email():
     print ("Test")
 

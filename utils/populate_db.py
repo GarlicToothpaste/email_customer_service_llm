@@ -5,7 +5,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 WATCH_PATH = Path("./knowledge_base")
 
-#TODO: Check if the file already exists in the db.
 def index_folder(vectorstore):
     """Index files, skipping already-indexed ones"""
     files = list(WATCH_PATH.glob("*.pdf"))
@@ -50,3 +49,4 @@ def index_folder(vectorstore):
             return f"Error Processing {file.name}: {str(e)}"
     
     return f"Indexed {len(files)} files -> {total_chunks} chunks"
+
