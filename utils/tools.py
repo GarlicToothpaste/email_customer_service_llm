@@ -1,4 +1,4 @@
-def send_Email():
+def send_email():
     print ("Test")
 
 def get_documentation():
