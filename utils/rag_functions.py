@@ -37,7 +37,7 @@ def query_rag(question : str, vectorstore , llm):
     context = "\n\n---\n\n".join([d.page_content for d in docs])
 
     prompt_template = f"""
-    You are an agent that summarizes data that answers a question given a context.
+    You are an customer service agent that helps people with a product with given context from a manual.
 
     Given this context: {context}
 
