@@ -3,6 +3,7 @@ from langchain.messages import HumanMessage
 from langgraph.types import interrupt, Command, RetryPolicy
 from typing import Literal
 from langgraph.graph import END
+from tools import get_documentation
 
 from utils.state import EmailAgentState, EmailClassification
 
@@ -54,13 +55,10 @@ def search_documentation(state : EmailAgentState) -> Command[Literal["draft_resp
     # Returns {} when there is no classification
     classification = state.get('classification' , {})
     query = f"{classification.get('intent', '')} {classification.get('topic', '')}"
-
+    question = state.get('email_content')
     try:
-        search_results = [
-            "Reset password via Settings > Security > Change Password",
-            "Password must be at least 12 characters",
-            "Include uppercase, lowercase, numbers, and symbols"
-        ]
+        search_results = get_documentation(question=question)
+
     except Exception as e:
         search_results = [f"Search temporarily unavailable: {str(e)}"]
     
