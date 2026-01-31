@@ -153,4 +153,4 @@ def send_reply (state: EmailAgentState):
 
     print(f"Sending the reply: {state['draft_response']}")
 
-    return {}
+    return state['draft_response']
