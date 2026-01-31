@@ -106,6 +106,7 @@ def draft_response(state: EmailAgentState) -> Command[Literal['human_review', "s
     - Be professional and helpful
     - Address their specific concern
     - Use the provided documentation when relevant
+    - The message you will draft will be sent as a reply to the customer
     """
 
     response = llm.invoke(draft_prompt)
@@ -153,4 +154,4 @@ def send_reply (state: EmailAgentState):
 
     print(f"Sending the reply: {state['draft_response']}")
 
-    return state['draft_response']
+    return {"draft_response" : state['draft_response']}
