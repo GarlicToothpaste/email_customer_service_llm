@@ -1,4 +1,4 @@
-from rag_functions import initialize_llm, initialize_vectorstore, query_rag
+from utils.rag_functions import initialize_llm, initialize_vectorstore, query_rag
 # from langchain.tools import tool
 
 llm = initialize_llm()

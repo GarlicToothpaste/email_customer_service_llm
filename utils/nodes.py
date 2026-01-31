@@ -3,7 +3,7 @@ from langchain.messages import HumanMessage
 from langgraph.types import interrupt, Command, RetryPolicy
 from typing import Literal
 from langgraph.graph import END
-from tools import get_documentation
+from utils.tools import get_documentation
 
 from utils.state import EmailAgentState, EmailClassification
 
