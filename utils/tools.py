@@ -47,8 +47,25 @@ def get_documentation(question: str):
     response = query_rag(question=question, vectorstore=vectorstore,llm=llm)
     return response
 
-def create_ticket():
-    print("Test")
+def create_ticket(description : str):
+    """Adds an ticket to the database"""
+    message = ""
+    try:
+        with engine.connect() as connection:
+
+            status = "TICKET_CREATED"
+            sql_statement = text(f"INSERT INTO customer_tickets ( description, status) VALUES ( :description, :status)")
+            result = connection.execute(sql_statement, { "description" : description, "status": status})
+            connection.commit()
+            
+            
+            ticket_id = result.lastrowid
+            message = f"Created ticket #{ticket_id}"
+    except Exception as e:
+        print(f"Connection failed: {e}")
+    return(message)
 
 def retrieve_ticket():
     print("Test")
+
+print(create_ticket("Test Ticket"))
