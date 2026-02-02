@@ -1,4 +1,4 @@
-from rag_functions import initialize_llm, initialize_vectorstore, query_rag
+from utils.rag_functions import initialize_llm, initialize_vectorstore, query_rag
 # from langchain.tools import tool
 
 import os
@@ -60,7 +60,7 @@ def create_ticket(description : str):
             
             
             ticket_id = result.lastrowid
-            message = f"Created ticket #{ticket_id}"
+            message = f"{ticket_id}"
     except Exception as e:
         print(f"Connection failed: {e}")
     return(message)

@@ -3,7 +3,7 @@ from langchain.messages import HumanMessage
 from langgraph.types import interrupt, Command, RetryPolicy
 from typing import Literal
 from langgraph.graph import END
-from utils.tools import get_documentation
+from utils.tools import get_documentation, create_ticket
 
 from utils.state import EmailAgentState, EmailClassification
 
@@ -70,8 +70,9 @@ def search_documentation(state : EmailAgentState) -> Command[Literal["draft_resp
 
 def bug_tracking(state : EmailAgentState) -> Command[Literal["draft_response"]]:
     """Creates or update a bug report ticket"""
+    #TODO: Make summarize message -> Create Ticket based on message. If user has a ticket already, retrieve it instead of summarizing
+    ticket_id = create_ticket()
 
-    ticket_id = "BUG-4245"
     return Command(
         update={
             "search_results" : [f"Bug Ticket with {ticket_id} created"],
