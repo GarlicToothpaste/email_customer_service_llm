@@ -1,4 +1,4 @@
-from utils.rag_functions import initialize_llm, initialize_vectorstore, query_rag
+from rag_functions import initialize_llm, initialize_vectorstore, query_rag
 # from langchain.tools import tool
 
 import os
@@ -6,7 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from sqlalchemy.engine import URL
 from sqlalchemy import create_engine, text
-
+from sqlalchemy.orm import Session
 
 load_dotenv()  
 
@@ -65,7 +65,24 @@ def create_ticket(description : str):
         print(f"Connection failed: {e}")
     return(message)
 
-def retrieve_ticket():
-    print("Test")
-
-print(create_ticket("Test Ticket"))
+def retrieve_ticket(ticket_id : str):
+    """Gets the status of a ticket"""
+    message = ""
+    try:
+        with engine.connect() as connection:
+            sql_statement = text(f"SELECT status FROM customer_tickets WHERE ticket_id = :ticket_id")
+            result = connection.execute(sql_statement, {"ticket_id" : ticket_id})
+            
+            row = result.fetchone()
+            
+            if row:
+                status = row[0]
+                message = f'Current status of  ticket {ticket_id}: {status}'
+            
+            else:
+                message = f'Ticket ID {ticket_id} not found'
+    except Exception as e:
+        print(f"Connection failed: {e}")
+    return(message)
+ 
+print(retrieve_ticket("5"))
