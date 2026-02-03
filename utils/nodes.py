@@ -71,6 +71,17 @@ def search_documentation(state : EmailAgentState) -> Command[Literal["draft_resp
 def bug_tracking(state : EmailAgentState) -> Command[Literal["draft_response"]]:
     """Creates or update a bug report ticket"""
     #TODO: Make summarize message -> Create Ticket based on message. If user has a ticket already, retrieve it instead of summarizing
+    bug_prompt = f"""
+    You are an AI that helps summarize emails for a ticketing system. 
+    
+    Given this email:
+    {state['email_content']}
+
+    Make a summary of their issue in 225 Characters or less.
+    """
+
+    response = llm.invoke(bug_prompt)
+
     ticket_id = create_ticket()
 
     return Command(

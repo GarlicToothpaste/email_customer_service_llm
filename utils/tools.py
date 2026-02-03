@@ -80,9 +80,10 @@ def retrieve_ticket(ticket_id : str):
                 message = f'Current status of  ticket {ticket_id}: {status}'
             
             else:
-                message = f'Ticket ID {ticket_id} not found'
+                # message = f'Ticket ID {ticket_id} not found'
+                message = "Ticket Not Found"
     except Exception as e:
         print(f"Connection failed: {e}")
     return(message)
  
-print(retrieve_ticket("5"))
+# print(retrieve_ticket("5"))
