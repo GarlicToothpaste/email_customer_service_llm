@@ -3,7 +3,7 @@ from langchain.messages import HumanMessage
 from langgraph.types import interrupt, Command, RetryPolicy
 from typing import Literal
 from langgraph.graph import END
-from utils.tools import get_documentation, create_ticket
+from utils.tools import get_documentation, create_ticket,retrieve_ticket
 
 from utils.state import EmailAgentState, EmailClassification
 
@@ -67,10 +67,30 @@ def search_documentation(state : EmailAgentState) -> Command[Literal["draft_resp
         goto="draft_response"
     )
 
+#TODO: ADD NODE THAT IDENTIFIES IF IT IS CRETE OR RETRIEVE BUG TRACKING TICKET
+def retrieve_bug_tracking_ticket(state: EmailAgentState) -> Command[Literal["draft_response"]]:
+    """Retrieves a bug report ticket"""
+    bug_prompt = f"""
+    You are an AI that helps retrieve customer service emails. 
+    
+    Given this email:
+    {state['email_content']}
 
-def bug_tracking(state : EmailAgentState) -> Command[Literal["draft_response"]]:
-    """Creates or update a bug report ticket"""
-    #TODO: Make summarize message -> Create Ticket based on message. If user has a ticket already, retrieve it instead of summarizing
+    Get the ticket ID only provided by the customer.
+    """
+    response = llm.invoke(bug_prompt)
+
+    response = retrieve_ticket(response)
+    return Command(
+        update = {
+            "search_results": response,
+            "current_step" : "retrieved_bug_tracking_ticket"
+
+        }, goto=draft_response
+    )
+
+def create_bug_tracking_ticket(state : EmailAgentState) -> Command[Literal["draft_response"]]:
+    """Creates a bug report ticket"""
     bug_prompt = f"""
     You are an AI that helps summarize emails for a ticketing system. 
     
@@ -82,12 +102,12 @@ def bug_tracking(state : EmailAgentState) -> Command[Literal["draft_response"]]:
 
     response = llm.invoke(bug_prompt)
 
-    ticket_id = create_ticket()
+    ticket_id = create_ticket(response)
 
     return Command(
         update={
             "search_results" : [f"Bug Ticket with {ticket_id} created"],
-            "current_step" : "bug_tracked"
+            "current_step" : "created_bug_tracking_ticket"
         },
         goto = "draft_response"
     )
