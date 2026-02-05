@@ -67,7 +67,17 @@ def search_documentation(state : EmailAgentState) -> Command[Literal["draft_resp
         goto="draft_response"
     )
 
-#TODO: ADD NODE THAT IDENTIFIES IF IT IS CRETE OR RETRIEVE BUG TRACKING TICKET
+def identify_ticket(state:EmailAgentState) -> Command[Literal['retrieve_bug_tracking_ticket' , 'create_bug_tracking_ticket']]:
+    #TODO: Add Structure
+    bug_prompt = f"""
+    You are an AI that helps categorize customer tickets.
+
+    Given this email:
+    {state['email_content']}
+
+    Determine if the user wants to create a ticket or retrieve a previously created one
+    """
+
 def retrieve_bug_tracking_ticket(state: EmailAgentState) -> Command[Literal["draft_response"]]:
     """Retrieves a bug report ticket"""
     bug_prompt = f"""
