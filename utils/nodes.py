@@ -5,7 +5,7 @@ from typing import Literal
 from langgraph.graph import END
 from utils.tools import get_documentation, create_ticket,retrieve_ticket
 
-from utils.state import EmailAgentState, EmailClassification
+from utils.state import EmailAgentState, EmailClassification,TicketClassification
 
 llm = ChatOllama(
     model="qwen3:4b",
@@ -69,7 +69,10 @@ def search_documentation(state : EmailAgentState) -> Command[Literal["draft_resp
 
 def identify_ticket(state:EmailAgentState) -> Command[Literal['retrieve_bug_tracking_ticket' , 'create_bug_tracking_ticket']]:
     #TODO: Add Structure
-    bug_prompt = f"""
+
+    structured_llm = llm.with_structured_output(TicketClassification)
+
+    ticket_classification_prompt = f"""
     You are an AI that helps categorize customer tickets.
 
     Given this email:
@@ -77,6 +80,18 @@ def identify_ticket(state:EmailAgentState) -> Command[Literal['retrieve_bug_trac
 
     Determine if the user wants to create a ticket or retrieve a previously created one
     """
+    ticket_classification = structured_llm.invoke(ticket_classification_prompt)
+
+    if ticket_classification == 'create_ticket':
+        goto = 'create_bug_tracking_ticket'
+    elif ticket_classification =='retrieve_ticket':
+        goto = 'retrieve_bug_tracking_ticket'
+
+    return Command(
+        update={"ticket_classification" : ticket_classification},
+        goto = goto
+    )
+
 
 def retrieve_bug_tracking_ticket(state: EmailAgentState) -> Command[Literal["draft_response"]]:
     """Retrieves a bug report ticket"""
