@@ -40,7 +40,7 @@ def classify_intent(state : EmailAgentState) -> Command[Literal["search_document
     elif classification['intent'] in ['question', 'feature']:
         goto = "search_documentation"
     elif classification['intent'] == 'bug':
-        goto = "bug_tracking"
+        goto = "identify_ticket"
     else:
         goto = "draft_response"
 
