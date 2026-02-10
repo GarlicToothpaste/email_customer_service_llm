@@ -23,8 +23,19 @@ workflow.add_edge("send_reply", END)
 graph = workflow.compile()
 
 #Testing
+# result = graph.invoke({
+#     "email_content": "Hello, I have a question on the product. How do I insert a game card to the system?",
+#     "sender_email": "user@example.com",
+#     "email_id": "email_123",
+#     "classification": None,
+#     "search_results": None,
+#     "customer_history": None,
+#     "draft_response": None,
+#     "messages": None,
+# })
+
 result = graph.invoke({
-    "email_content": "Hello, I have a question on the product. How do I insert a game card to the system?",
+    "email_content": "Hello, I would like to file a ticket. My product is missing its charger",
     "sender_email": "user@example.com",
     "email_id": "email_123",
     "classification": None,
