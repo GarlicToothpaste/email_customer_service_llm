@@ -68,8 +68,7 @@ def search_documentation(state : EmailAgentState) -> Command[Literal["draft_resp
     )
 
 def identify_ticket(state:EmailAgentState) -> Command[Literal['retrieve_bug_tracking_ticket' , 'create_bug_tracking_ticket']]:
-    #TODO: Add Structure
-
+    """Classified whether to retrieve or create a ticket"""
     structured_llm = llm.with_structured_output(TicketClassification)
 
     ticket_classification_prompt = f"""
@@ -138,7 +137,7 @@ def create_bug_tracking_ticket(state : EmailAgentState) -> Command[Literal["draf
     )
 
 def draft_response(state: EmailAgentState) -> Command[Literal['human_review', "send_reply"]]:
-
+    """Drafts a response for the user"""
     classification = state.get('classification', {})
 
     context_sections = []
