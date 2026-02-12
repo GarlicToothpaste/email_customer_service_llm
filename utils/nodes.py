@@ -3,7 +3,7 @@ from langchain.messages import HumanMessage
 from langgraph.types import interrupt, Command, RetryPolicy
 from typing import Literal
 from langgraph.graph import END
-from utils.tools import get_documentation, create_ticket,retrieve_ticket
+from utils.tools import get_documentation, create_ticket,retrieve_ticket, send_email
 
 from utils.state import EmailAgentState, EmailClassification,TicketClassification
 
@@ -19,7 +19,7 @@ def read_email (state : EmailAgentState):
         "messages": HumanMessage(content=f"Processing email: {state['email_content']}")
     }
 
-def classify_intent(state : EmailAgentState) -> Command[Literal["search_documentation", "human_review", "draft_response", "bug_tracking"]]:
+def classify_intent(state : EmailAgentState) -> Command[Literal["search_documentation", "human_review", "draft_response", "identify_ticket"]]:
     """Use LLM to classify email intent and urgency, then route accordingly"""
 
     structured_llm = llm.with_structured_output(EmailClassification)
@@ -207,7 +207,10 @@ def human_review (state: EmailAgentState):
 
 def send_reply (state: EmailAgentState):
     """Send Email Response"""
+    sender_email = state.get("sender_email", "")
+    content = state.get("draft_response", "")
+    send_email(sender_email , content)
 
-    print(f"Sending the reply: {state['draft_response']}")
+    # print(f"Sending the reply: {state['draft_response']}")
 
     return {"draft_response" : state['draft_response']}

@@ -42,13 +42,12 @@ llm = initialize_llm()
 vectorstore = initialize_vectorstore()
 
 
-def send_email():
+def send_email(email : str, text: str):
     mail = mt.Mail(
         sender=mt.Address(email="hello@demomailtrap.co", name="Mailtrap Test"),
-        to=[mt.Address(email="adrianpdanao@gmail.com")],
-        subject="You are awesome!",
-        text="Congrats for sending test email with Mailtrap!",
-        category="Integration Test",
+        to=[mt.Address(email="test@gmail.com")],
+        subject="Testing",
+        text=text,
     )
 
     client = mt.MailtrapClient(token=mailtrap_api_key)
