@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from sqlalchemy.engine import URL
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session
+import mailtrap as mt
+
 
 load_dotenv()  
 
@@ -17,6 +19,7 @@ password = os.environ.get("DB_PASSWORD")
 host = os.environ.get("DB_HOST")
 database = os.environ.get("DATABASE")
 port = os.environ.get("PORT") # Optional, defaults are often fine
+mailtrap_api_key = os.environ.get("MAILTRAP_API_KEY")
 
 if driver:
     drivername = f"{db_type}+{driver}"
@@ -40,7 +43,18 @@ vectorstore = initialize_vectorstore()
 
 
 def send_email():
-    print ("Test")
+    mail = mt.Mail(
+        sender=mt.Address(email="hello@demomailtrap.co", name="Mailtrap Test"),
+        to=[mt.Address(email="adrianpdanao@gmail.com")],
+        subject="You are awesome!",
+        text="Congrats for sending test email with Mailtrap!",
+        category="Integration Test",
+    )
+
+    client = mt.MailtrapClient(token=mailtrap_api_key)
+    response = client.send(mail)
+
+    print(response)
 
 def get_documentation(question: str):
     """Gets information based on a question"""
@@ -87,3 +101,4 @@ def retrieve_ticket(ticket_id : str):
     return(message)
  
 # print(retrieve_ticket("5"))
+
