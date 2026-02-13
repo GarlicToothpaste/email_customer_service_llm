@@ -41,7 +41,7 @@ engine = create_engine(DATABASE_URL, echo=True)
 llm = initialize_llm()
 vectorstore = initialize_vectorstore()
 
-
+#Change to better email
 def send_email(email : str, text: str):
     mail = mt.Mail(
         sender=mt.Address(email="hello@demomailtrap.co", name="Mailtrap Test"),
